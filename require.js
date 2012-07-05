@@ -1587,7 +1587,7 @@ var requirejs, require, define;
              */
             nameToUrl: function (moduleName, ext) {
                 var paths, pkgs, pkg, pkgPath, syms, i, parentModule, url,
-                    parentPath;
+                    parentPath, jsSuffix;
 
                 //If a colon is in the URL, it indicates a protocol is used and it is just
                 //an URL to a file, or if it starts with a slash, contains a query arg (i.e. ?)
@@ -1602,6 +1602,7 @@ var requirejs, require, define;
                     //A module that needs to be converted to a path.
                     paths = config.paths;
                     pkgs = config.pkgs;
+					jsSuffix = config.jsSuffix || "";
 
                     syms = moduleName.split('/');
                     //For each module name segment, see if there is a path
@@ -1633,7 +1634,12 @@ var requirejs, require, define;
                     }
 
                     //Join the path parts together, then figure out if baseUrl is needed.
-                    url = syms.join('/') + (ext || '.js');
+					if (ext) {
+						url = syms.join('/') + ext;
+					} else {
+						url = syms.join('/') + jsSuffix + '.js';
+					}
+
                     url = (url.charAt(0) === '/' || url.match(/^[\w\+\.\-]+:/) ? '' : config.baseUrl) + url;
                 }
 
